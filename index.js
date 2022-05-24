@@ -6,7 +6,7 @@ const path = require("path");
 //Creating server
 const app = express();
 app.use(express.json());
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 //Setting up ejs
 app.set("view engine","ejs");
 // app.use(express.static(path.join(__dirname,"/public")));
@@ -118,32 +118,11 @@ app.get("/search",(req,res)=>{
         let j=finalList[i][1];
         array1.push({title:name[j],url:prob_url[j]});
     }
-// const arr=[
-//         {
-//             title:"ABC",
-//             url:"https://google.com"
-//         },
-//         {
-//             title:"ABC",
-//             url:"https://google.com"
-//         },
-//         {
-//             title:"ABC",
-//             url:"https://google.com"
-//         },
-//         {
-//             title:"ABC",
-//             url:"https://google.com"
-//         },
-//         {
-//             title:"ABC",
-//             url:"https://google.com"
-//         }
-//     ];
+
     res.json(array1);
 });
 
 //Assigning port to our application
-app.listen(3000,()=>{
+app.listen(PORT,()=>{
     console.log("Server is running on port" + PORT);
 });
