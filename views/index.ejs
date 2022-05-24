@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchGuru</title>
+    <!-- <link href="styles.css"> -->
+</head>
+<body style="background-color: aqua;"b>
+    <h1 style="text-align:center;">SearchGuru</h1>
+
+    <form style="text-align:center ;">
+        <input type="text" name="question" id="question">
+        <input type="submit" value="Search">
+    </form>
+    <div class="loading" style="text-align:center;"></div>
+    <div class="question" style="text-align:center;">
+        <div class="title"></div>
+        <div class="url">
+            <a href=""></a>
+        </div>
+    </div>
+    <div class="question" style="text-align:center;">
+        <div class="title"></div>
+        <div class="url">
+            <a href=""></a>
+        </div>
+    </div>
+    <div class="question" style="text-align:center;">
+        <div class="title"></div>
+        <div class="url">
+            <a href=""></a>
+        </div>
+    </div>
+    <div class="question" style="text-align:center;">
+        <div class="title"></div>
+        <div class="url">
+            <a href=""></a>
+        </div>
+    </div>
+    <div class="question" style="text-align:center;">
+        <div class="title"></div>
+        <div class="url">
+            <a href=""></a>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    const form = document.querySelector("form");
+    const questionElement = form.question;
+
+    const questions = document.querySelectorAll(".question");
+    const titles = document.querySelectorAll(".title");
+    const urls = document.querySelectorAll(".url");
+    const loadingDiv = document.querySelector(".loading");
+
+    // console.log(questions);
+    // console.log(titles);
+    // console.log(urls);
+
+    form.addEventListener("submit",async (e)=>{
+        e.preventDefault();
+        const question = questionElement.value;
+        for (let i = 0; i < 5; i++) {
+            titles[i].innerHTML = ``;
+        }
+
+        loadingDiv.innerHTML = `Loading Your Request......`;
+        //fetch
+        try {
+            const res = await fetch(`/search?question=${question}`,{method:"GET"});
+            const data = await res.json();
+            // console.log(data);
+
+            loadingDiv.innerHTML = ``;
+            for(let i=0;i<5;i++){
+                titles[i].innerHTML = `<h3>${data[i].title}</h3>`;
+            }
+            
+        } catch (error) {
+            alert(error);
+        }
+    });
+</script>
