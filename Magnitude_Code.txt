@@ -1,0 +1,114 @@
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+stop=set(stopwords.words('english'))
+stri=""
+
+with open("idf_final.txt") as f:
+    data=f.readlines()
+    for x in data:
+        stri+=x;
+    idf=word_tokenize(stri)
+stri=""
+import os
+  
+# Folder Path
+path = r"path of the folder where code is executed"
+  
+# Change the directory
+os.chdir(path)
+
+key =list()
+# iterate through all file
+for file in os.listdir():
+    # Check whether file is in text format or not
+    if file.endswith(".txt"):
+        file_path = f"{path}\{file}"
+        with open(file_path) as f:
+            data =f.readlines()
+            for x in data:
+                val=x.strip()
+                stri=stri+val
+            tok=word_tokenize(stri)
+            ans=list()
+            for i in range(0,len(tok)):
+                if tok[i].lower() in stop:
+                    pass
+                else:
+                    ans.append(tok[i])
+            none=""
+            ans = list(map(lambda x: x.replace('\n',none).replace('\\n',none).replace(',',none),ans))
+            for i in range(len(ans)-1):
+                ans[i]=ans[i].lower()
+                if ans[i]=='' or ans[i]=='.' or ans[i].isalpha() == False:
+                    pass
+                else:
+                    key.append(ans[i])
+            ans.clear()
+            stri=""
+
+key_final=list()
+
+for i in key:
+    if i in key_final:
+        pass
+    else:
+        key_final.append(i)
+
+key_final.sort()
+
+key.clear()
+z=0
+tf=list()
+for file in os.listdir():
+    # Check whether file is in text format or not
+    if file.endswith(".txt"):
+        file_path = f"{path}\{file}"
+        with open(file_path) as f:
+            data =f.readlines()
+            for x in data:
+                val=x.strip()
+                stri=stri+val
+            tok=word_tokenize(stri)
+            ans=list()
+            for i in range(0,len(tok)):
+                if tok[i].lower() in stop:
+                    pass
+                else:
+                    ans.append(tok[i])
+            none=""
+            ans = list(map(lambda x: x.replace('\n',none).replace('\\n',none).replace(',',none),ans))
+            for i in range(len(ans)-1):
+                ans[i]=ans[i].lower()
+                if ans[i]=='' or ans[i]=='.' or ans[i].isalpha() == False:
+                    pass
+                else:
+                    key.append(ans[i])
+            ttf=list()
+            for i in range(len(key_final)):
+                st=""
+                st=key_final[i]
+                x=key.count(st)
+                ttf.append(float(idf[i])*x/len(key))
+            tf.append(ttf)
+            z+=1
+            ans.clear()
+            key.clear()
+            stri=""
+
+# for i in range(len(tf)):
+#     print(tf[i])
+import math
+tfidf=list()
+mag=list()
+sqsum=0
+for i in range(len(tf)):
+    for j in range(len(key_final)):
+        sqsum+=tf[i][j]*tf[i][j]
+    mag.append(math.sqrt(sqsum))
+    sqsum=0
+
+
+with open("mag_final.txt","a+") as f:
+    for x in mag:
+        f.write("%s\n" % x)

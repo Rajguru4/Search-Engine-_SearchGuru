@@ -1,0 +1,43 @@
+import time
+from selenium import webdriver
+from bs4 import BeautifulSoup
+from webdriver_manager.chrome import ChromeDriverManager
+driver = webdriver.Chrome(ChromeDriverManager().install())
+driver.get("https://www.codechef.com/tags/problems/bit-manipulation")
+time.sleep(5)
+
+html = driver.page_source
+
+soup = BeautifulSoup(html, 'html.parser')
+
+all_ques_div = soup.findAll("div", {"class":"problem-tagbox-inner"})
+all_ques=[]
+for ques in all_ques_div:
+    all_ques.append(ques.findAll("div")[0].find("a"))
+dummyurl=[]
+url =[]
+titles=[]
+for ques in all_ques:
+    url.append("https://www.codechef.com" + ques['href'])
+    dummyurl.append("https://www.codechef.com" + ques['href'])
+    titles.append(ques.text)
+
+# with open("problem_url.txt","a+") as f:
+#     f.write('\n'. join(url))
+
+# with open("problem_titles.txt","a+") as f:
+#     f.write('\n'. join(titles))
+cnt =1471;
+#for i in range(165):
+##    del dummyurl[0]
+for urls in dummyurl:
+    driver.get(urls)
+    time.sleep(5)
+    cnt+=1
+    html1 = driver.page_source
+    soup1 = BeautifulSoup(html1,'html.parser')
+    problem_text = soup1.find("div",{"class":"problem-statement"}).text
+    problem_text = problem_text.encode("utf-8")
+    problem_text =  str(problem_text)
+    with open("problem"+str(cnt)+".txt","w+") as f:
+        f.write(problem_text.strip())
